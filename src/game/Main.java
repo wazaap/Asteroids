@@ -21,7 +21,6 @@ public class Main extends SimpleApplication {
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setTitle("Asteroids 3D");
-
         Main app = new Main();
         app.setSettings(settings); // apply settings to app
         app.start(); // use settings and run
@@ -32,7 +31,7 @@ public class Main extends SimpleApplication {
         flyCam.setMoveSpeed(100f);
         rootNode.attachChild(SkyFactory.createSky(
                 assetManager, "Textures/SkyBox/BackgroundCube.dds", false));
-        AsteroidState state = new AsteroidState();
+        AsteroidsState state = new AsteroidsState();
         stateManager.attach(state);
     }
 

@@ -26,7 +26,7 @@ import com.jme3.scene.shape.Box;
  *
  * @author Thomas
  */
-public class AsteroidState extends AbstractAppState {
+public class AsteroidsState extends AbstractAppState {
 
     private SimpleApplication app;
     private Camera cam;
@@ -69,20 +69,22 @@ public class AsteroidState extends AbstractAppState {
 
     private void makeAsteroids(int number) {
         for (int i = 0; i < number; i++) {
-            System.out.println("Asteroids " + i);
             Vector3f loc = new Vector3f(
-                    FastMath.nextRandomInt(-100, 100),
-                    FastMath.nextRandomInt(-100, 100),
-                    FastMath.nextRandomInt(-100, 100));
+                    FastMath.nextRandomInt(-200, 200),
+                    FastMath.nextRandomInt(-200, 200),
+                    FastMath.nextRandomInt(-200, 200));
             Spatial asteroid = asteroid("Asteroid" + i, loc);
-            asteroid.setLocalScale(FastMath.nextRandomInt(0, 5));
-            Float xspin = FastMath.nextRandomFloat()/20;
-            Float yspin = FastMath.nextRandomFloat()/20;
-            Float zspin = FastMath.nextRandomFloat()/20;
+            asteroid.setLocalScale(FastMath.nextRandomInt(0, 7));
+            Float xspin = FastMath.nextRandomFloat()/20 - FastMath.nextRandomFloat()/10;
+            Float yspin = FastMath.nextRandomFloat()/20 - FastMath.nextRandomFloat()/10;
+            Float zspin = FastMath.nextRandomFloat()/20 - FastMath.nextRandomFloat()/10;
+            //Stationary asteroids for testing
+//            Vector3f direction = new Vector3f(0, 0, 0);
+            //Moving asteroids
             Vector3f direction = new Vector3f(
-                    FastMath.nextRandomFloat(), 
-                    FastMath.nextRandomFloat(), 
-                    FastMath.nextRandomFloat());
+                    FastMath.nextRandomFloat()/2 - FastMath.nextRandomFloat(), 
+                    FastMath.nextRandomFloat()/2 - FastMath.nextRandomFloat(), 
+                    FastMath.nextRandomFloat()/2 - FastMath.nextRandomFloat());
             asteroid.addControl(new AsteroidControl(direction, xspin, yspin, zspin));
             rootNode.attachChild(asteroid);
         }
