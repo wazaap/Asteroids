@@ -27,40 +27,59 @@ import com.jme3.scene.shape.Box;
  * @author Thomas
  */
 public class GameState extends AbstractAppState {
-
+    
     private SimpleApplication app;
     private Camera cam;
     private Node rootNode;
+    private Node asteroidNode;
+    private Node lightNode;
     private AssetManager assetManager;
     private Ray ray = new Ray();
-    private static Box mesh = new Box(Vector3f.ZERO, 1, 1, 1);
-
+    
     @Override
     public void update(float tpf) {
         CollisionResults results = new CollisionResults();
         ray.setOrigin(cam.getLocation());
         ray.setDirection(cam.getDirection());
-        rootNode.collideWith(ray, results);
+        asteroidNode.collideWith(ray, results);
         if (results.size() > 0) {
+            AsteroidControl asteroid = getAsteroidControl(results.getClosestCollision().getGeometry());
+            asteroid.setXSpin(0);
+            asteroid.setYSpin(0);
+            asteroid.setZSpin(0);
         }
     }
-
+    
+    private AsteroidControl getAsteroidControl(Geometry g) {
+        if (!g.getParent().getName().equalsIgnoreCase("asteroidnode")) {
+            Node n = g.getParent();
+            while (!n.getParent().getName().equalsIgnoreCase("asteroidnode")) {
+                n = n.getParent();
+            }
+            return n.getControl(AsteroidControl.class);
+        }
+        return g.getControl(AsteroidControl.class);
+    }
+    
     @Override
     public void cleanup() {
     }
-
+    
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
+        asteroidNode = new Node("asteroidnode");
+        lightNode = new Node("lightnode");
         this.app = (SimpleApplication) app;
         this.cam = this.app.getCamera();
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
         makeAsteroids(30);
-        addLight();
-
+        rootNode.addLight(addLight());
+        rootNode.attachChild(asteroidNode);
+        rootNode.attachChild(lightNode);
     }
-
+    
     private void makeAsteroids(int number) {
         for (int i = 0; i < number; i++) {
             //Generating random location
@@ -68,43 +87,38 @@ public class GameState extends AbstractAppState {
                     FastMath.nextRandomInt(-200, 200),
                     FastMath.nextRandomInt(-200, 200),
                     FastMath.nextRandomInt(-200, 200));
-            Spatial asteroid = asteroid("Asteroid" + i, loc);
-            
+            Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
+            asteroid.setLocalTranslation(loc);
+            asteroid.addControl(new AsteroidControl());
+            System.out.println(asteroid.getNumControls());
+            System.out.println(asteroid.getName());
             //Setting random size of asteroid
-            int size = FastMath.nextRandomInt(0, 7);
+            int size = FastMath.nextRandomInt(0, 10);
             asteroid.setLocalScale(size);
             asteroid.setUserData("size", size);
-            
             //Generating random spin
             asteroid.setUserData("xspin", FastMath.nextRandomFloat() / 20 - FastMath.nextRandomFloat() / 10);
             asteroid.setUserData("yspin", FastMath.nextRandomFloat() / 20 - FastMath.nextRandomFloat() / 10);
             asteroid.setUserData("zspin", FastMath.nextRandomFloat() / 20 - FastMath.nextRandomFloat() / 10);
-            
+//            
             //Stationary asteroids for testing
-            asteroid.setUserData("direction", new Vector3f(0, 0, 0));
-            
-            //Generating random direction of asteroid
-//            Vector3f direction = new Vector3f(
-//                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
-//                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
-//                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat());
-//                        asteroid.setUserData("direction", direction);
+//            asteroid.setUserData("direction", new Vector3f(0, 0, 0));
 
-            asteroid.addControl(new AsteroidControl());
-            rootNode.attachChild(asteroid);
+            //Generating random direction of asteroid
+            Vector3f direction = new Vector3f(
+                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
+                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
+                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat());
+            asteroid.setUserData("direction", direction);
+            
+            asteroidNode.attachChild(asteroid);
         }
     }
-
-    public Spatial asteroid(String name, Vector3f loc) {
-        Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
-        asteroid.setLocalTranslation(loc);
-        return asteroid;
-    }
-
-    private void addLight() {
+    
+    private DirectionalLight addLight() {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)));
         sun.setColor(ColorRGBA.White.mult(0.5f));
-        rootNode.addLight(sun);
+        return sun;
     }
 }

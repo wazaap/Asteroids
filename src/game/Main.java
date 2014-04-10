@@ -16,8 +16,6 @@ import com.jme3.util.SkyFactory;
  */
 public class Main extends SimpleApplication {
 
-    private static Box mesh = new Box(Vector3f.ZERO, 1, 1, 1);
-
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setTitle("Asteroids 3D");
