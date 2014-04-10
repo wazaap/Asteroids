@@ -90,8 +90,6 @@ public class GameState extends AbstractAppState {
             Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
             asteroid.setLocalTranslation(loc);
             asteroid.addControl(new AsteroidControl());
-            System.out.println(asteroid.getNumControls());
-            System.out.println(asteroid.getName());
             //Setting random size of asteroid
             int size = FastMath.nextRandomInt(0, 10);
             asteroid.setLocalScale(size);

@@ -24,6 +24,27 @@ public class AsteroidControl extends AbstractControl {
     protected void controlUpdate(float tpf) {
         spatial.rotate(getXSpin(), getYSpin(), getZSpin());
         spatial.move(getDirection());
+        Vector3f location = spatial.getWorldTranslation();
+        if (location.getX() > 200) {
+            location.setX(-200);
+        }
+        if (location.getX() < -200) {
+            location.setX(200);
+        }
+        if (location.getY() > 200) {
+            location.setY(-200);
+        }
+        if (location.getY() < -200) {
+            location.setY(200);
+        }
+        if (location.getZ() > 200) {
+            location.setZ(-200);
+        }
+        if (location.getZ() < -200) {
+            location.setZ(200);
+        }
+        spatial.setLocalTranslation(location);
+
     }
 
     public int getAsteroidSize() {
@@ -41,16 +62,16 @@ public class AsteroidControl extends AbstractControl {
     public float getZSpin() {
         return spatial.getUserData("zspin");
     }
-    
-    public void setXSpin(float x){
+
+    public void setXSpin(float x) {
         spatial.setUserData("xspin", x);
     }
-    
-    public void setYSpin(float y){
+
+    public void setYSpin(float y) {
         spatial.setUserData("yspin", y);
     }
-    
-    public void setZSpin(float z){
+
+    public void setZSpin(float z) {
         spatial.setUserData("zspin", z);
     }
 
