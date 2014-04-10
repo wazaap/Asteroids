@@ -22,26 +22,13 @@ import com.jme3.scene.control.Control;
  */
 public class AsteroidControl extends AbstractControl {
 
-    private Vector3f direction;
-    private float xspin;
-    private float yspin;
-    private float zspin;
-
-    public AsteroidControl(Vector3f direction, float xspin, float yspin, float zspin) {
-        this.direction = direction;
-        this.xspin = xspin;
-        this.yspin = yspin;
-        this.zspin = zspin;
+    public AsteroidControl() {
     }
-
-
-
-
 
     @Override
     protected void controlUpdate(float tpf) {
-        spatial.rotate(xspin, yspin, zspin);
-        spatial.move(direction);
+        spatial.rotate(getXSpin(), getYSpin(), getZSpin());
+        spatial.move(getDirection());
     }
 
     protected void controlRender(RenderManager rm, ViewPort vp) {
@@ -51,5 +38,25 @@ public class AsteroidControl extends AbstractControl {
     public Control cloneForSpatial(Spatial spatial) {
         throw new UnsupportedOperationException(
                 "Not supported yet.");
+    }
+
+    public int getAsteroidSize() {
+        return spatial.getUserData("size");
+    }
+
+    public float getXSpin() {
+        return spatial.getUserData("xspin");
+    }
+
+    public float getYSpin() {
+        return spatial.getUserData("yspin");
+    }
+
+    public float getZSpin() {
+        return spatial.getUserData("zspin");
+    }
+    
+    public Vector3f getDirection(){
+        return spatial.getUserData("direction");
     }
 }

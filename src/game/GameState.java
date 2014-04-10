@@ -26,7 +26,7 @@ import com.jme3.scene.shape.Box;
  *
  * @author Thomas
  */
-public class AsteroidsState extends AbstractAppState {
+public class GameState extends AbstractAppState {
 
     private SimpleApplication app;
     private Camera cam;
@@ -42,12 +42,6 @@ public class AsteroidsState extends AbstractAppState {
         ray.setDirection(cam.getDirection());
         rootNode.collideWith(ray, results);
         if (results.size() > 0) {
-            Geometry target = results.getClosestCollision().getGeometry();
-            if (target.getControl(AsteroidControl.class) != null) {
-                if (cam.getLocation().
-                        distance(target.getLocalTranslation()) < 10) {
-                }
-            }
         }
     }
 
@@ -69,23 +63,34 @@ public class AsteroidsState extends AbstractAppState {
 
     private void makeAsteroids(int number) {
         for (int i = 0; i < number; i++) {
+            //Generating random location
             Vector3f loc = new Vector3f(
                     FastMath.nextRandomInt(-200, 200),
                     FastMath.nextRandomInt(-200, 200),
                     FastMath.nextRandomInt(-200, 200));
             Spatial asteroid = asteroid("Asteroid" + i, loc);
-            asteroid.setLocalScale(FastMath.nextRandomInt(0, 7));
-            Float xspin = FastMath.nextRandomFloat()/20 - FastMath.nextRandomFloat()/10;
-            Float yspin = FastMath.nextRandomFloat()/20 - FastMath.nextRandomFloat()/10;
-            Float zspin = FastMath.nextRandomFloat()/20 - FastMath.nextRandomFloat()/10;
+            
+            //Setting random size of asteroid
+            int size = FastMath.nextRandomInt(0, 7);
+            asteroid.setLocalScale(size);
+            asteroid.setUserData("size", size);
+            
+            //Generating random spin
+            asteroid.setUserData("xspin", FastMath.nextRandomFloat() / 20 - FastMath.nextRandomFloat() / 10);
+            asteroid.setUserData("yspin", FastMath.nextRandomFloat() / 20 - FastMath.nextRandomFloat() / 10);
+            asteroid.setUserData("zspin", FastMath.nextRandomFloat() / 20 - FastMath.nextRandomFloat() / 10);
+            
             //Stationary asteroids for testing
-//            Vector3f direction = new Vector3f(0, 0, 0);
-            //Moving asteroids
-            Vector3f direction = new Vector3f(
-                    FastMath.nextRandomFloat()/2 - FastMath.nextRandomFloat(), 
-                    FastMath.nextRandomFloat()/2 - FastMath.nextRandomFloat(), 
-                    FastMath.nextRandomFloat()/2 - FastMath.nextRandomFloat());
-            asteroid.addControl(new AsteroidControl(direction, xspin, yspin, zspin));
+            asteroid.setUserData("direction", new Vector3f(0, 0, 0));
+            
+            //Generating random direction of asteroid
+//            Vector3f direction = new Vector3f(
+//                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
+//                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
+//                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat());
+//                        asteroid.setUserData("direction", direction);
+
+            asteroid.addControl(new AsteroidControl());
             rootNode.attachChild(asteroid);
         }
     }

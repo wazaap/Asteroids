@@ -31,7 +31,7 @@ public class Main extends SimpleApplication {
         flyCam.setMoveSpeed(100f);
         rootNode.attachChild(SkyFactory.createSky(
                 assetManager, "Textures/SkyBox/BackgroundCube.dds", false));
-        AsteroidsState state = new AsteroidsState();
+        GameState state = new GameState();
         stateManager.attach(state);
     }
 
