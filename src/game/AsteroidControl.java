@@ -4,6 +4,7 @@
  */
 package game;
 
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -22,61 +23,42 @@ public class AsteroidControl extends AbstractControl {
 
     @Override
     protected void controlUpdate(float tpf) {
-        spatial.rotate(getXSpin(), getYSpin(), getZSpin());
-        spatial.move(getDirection());
-        Vector3f location = spatial.getWorldTranslation();
+        Vector3f location = new Vector3f(spatial.getWorldTranslation());
         if (location.getX() > 200) {
             location.setX(-200);
+            spatial.getControl(RigidBodyControl.class).setPhysicsLocation(location);
         }
         if (location.getX() < -200) {
             location.setX(200);
+                        spatial.getControl(RigidBodyControl.class).setPhysicsLocation(location);
+
+
         }
         if (location.getY() > 200) {
             location.setY(-200);
+            spatial.getControl(RigidBodyControl.class).setPhysicsLocation(location);
+
         }
         if (location.getY() < -200) {
             location.setY(200);
+            spatial.getControl(RigidBodyControl.class).setPhysicsLocation(location);
+
         }
         if (location.getZ() > 200) {
             location.setZ(-200);
+            spatial.getControl(RigidBodyControl.class).setPhysicsLocation(location);
+
         }
         if (location.getZ() < -200) {
             location.setZ(200);
+            spatial.getControl(RigidBodyControl.class).setPhysicsLocation(location);
+
         }
-        spatial.setLocalTranslation(location);
 
     }
 
     public int getAsteroidSize() {
         return spatial.getUserData("size");
-    }
-
-    public float getXSpin() {
-        return spatial.getUserData("xspin");
-    }
-
-    public float getYSpin() {
-        return spatial.getUserData("yspin");
-    }
-
-    public float getZSpin() {
-        return spatial.getUserData("zspin");
-    }
-
-    public void setXSpin(float x) {
-        spatial.setUserData("xspin", x);
-    }
-
-    public void setYSpin(float y) {
-        spatial.setUserData("yspin", y);
-    }
-
-    public void setZSpin(float z) {
-        spatial.setUserData("zspin", z);
-    }
-
-    public Vector3f getDirection() {
-        return spatial.getUserData("direction");
     }
 
     @Override
