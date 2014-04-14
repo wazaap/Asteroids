@@ -46,7 +46,9 @@ public class MissileControl extends AbstractControl {
         return spatial.getUserData("direction");
     }
 
-    private void doDamage() {
+    public void hitAsteroid() {
+    //do dameage
+        remove();
     }
     
     private void remove(){

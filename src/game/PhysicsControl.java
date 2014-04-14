@@ -13,10 +13,16 @@ import com.jme3.bullet.control.RigidBodyControl;
  * @author Thomas
  */
 public class PhysicsControl extends RigidBodyControl
-    implements PhysicsCollisionListener {
+        implements PhysicsCollisionListener {
 
     public void collision(PhysicsCollisionEvent event) {
-        System.out.println("Collision!!");
+        if (event.getNodeB() != null) {
+            if (event.getNodeB().getControl(MissileControl.class) != null) {
+                System.out.println("Collision!!" + event.getNodeA().getName() + " --- " + event.getNodeB().getName());
+                event.getNodeB().getControl(MissileControl.class).hitAsteroid();
+                
+                //TODO: Add effect and remove life from asteroid.
+            }
+        }
     }
-    
 }
