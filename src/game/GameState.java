@@ -70,7 +70,7 @@ public class GameState extends AbstractAppState {
         rootNode.attachChild(missileNode);
 //      rootNode.attachChild(laserNode);
 
-        //Add statemanagers
+        //Add statemanagers & Physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
