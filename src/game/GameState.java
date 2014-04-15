@@ -141,6 +141,8 @@ public class GameState extends AbstractAppState {
             //Setting random size of asteroid
             int size = FastMath.nextRandomInt(0, 10);
             asteroid.setLocalScale(size);
+            asteroid.setUserData("size", size);
+            asteroid.setUserData("health", size * 10);
             SphereCollisionShape sphereShape = new SphereCollisionShape(size * 3);
             RigidBodyControl physControl = new RigidBodyControl(sphereShape, size);
             //Generating random speed

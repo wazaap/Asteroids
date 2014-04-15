@@ -46,7 +46,7 @@ public class MissileControl extends AbstractControl {
     }
 
     public void hitAsteroid(AsteroidControl asteroid) {
-        //do dameage
+        asteroid.setHealth(health);
         game.createExplosion(spatial.getWorldTranslation());
         remove();
     }

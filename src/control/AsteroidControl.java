@@ -77,4 +77,16 @@ public class AsteroidControl extends AbstractControl {
         }
         game.moveAsteroidEffect(newLocation, oldLocation);
     }
+    
+    public int getHealth(){
+        return spatial.getUserData("health");
+    }
+    
+    public void setHealth(int health){
+        spatial.setUserData("health", health);
+    }
+    public void addHealth(int damage){
+        setHealth(getHealth() - damage);
+    }
+    
 }
