@@ -45,15 +45,15 @@ public class MissileControl extends AbstractControl {
         return spatial.getUserData("direction");
     }
 
-    public void hitAsteroid() {
-    //do dameage
+    public void hitAsteroid(AsteroidControl asteroid) {
+        //do dameage
         game.createExplosion(spatial.getWorldTranslation());
         remove();
     }
-    
-    private void remove(){
+
+    private void remove() {
         spatial.removeFromParent();
         spatial.removeControl(spatial.getControl(RigidBodyControl.class));
-        spatial.removeControl(this);  
+        spatial.removeControl(this);
     }
 }

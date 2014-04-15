@@ -96,15 +96,15 @@ public class GameState extends AbstractAppState {
         Picture pic = new Picture("HUD Picture");
         float y = app.getContext().getSettings().getHeight();
         float x = app.getContext().getSettings().getWidth();
-        pic.setImage(assetManager, "Interface/crosshair.png", true);
-        pic.setWidth(200);
-        pic.setHeight(200);
-        pic.setPosition(x / 2 - 100, y / 2 - 100);
+        pic.setImage(assetManager, "Interface/crosshair1.png", true);
+        pic.setWidth(180);
+        pic.setHeight(180);
+        pic.setPosition(x / 2 - 90, y / 2 - 90);
         app.getGuiNode().attachChild(pic);
     }
 
     private DirectionalLight addLight() {
-        
+
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)));
         sun.setColor(ColorRGBA.White.mult(0.5f));
@@ -137,7 +137,7 @@ public class GameState extends AbstractAppState {
                     FastMath.nextRandomInt(-200, 200));
             Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
             asteroid.setLocalTranslation(loc);
-            asteroid.addControl(new AsteroidControl());
+            asteroid.addControl(new AsteroidControl(this));
             //Setting random size of asteroid
             int size = FastMath.nextRandomInt(0, 10);
             asteroid.setLocalScale(size);
@@ -163,14 +163,14 @@ public class GameState extends AbstractAppState {
         Sphere s = new Sphere(16, 16, 2f);
         Spatial missile = new Geometry("missile", s);
         Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Orange);
+        mat.setColor("Color", ColorRGBA.Cyan);
         missile.setMaterial(mat);
         missile.setUserData("direction", cam.getDirection());
         missile.setLocalTranslation(cam.getLocation());
 
         SphereCollisionShape sphereShape = new SphereCollisionShape(1.5f);
         RigidBodyControl physControl = new RigidBodyControl(sphereShape, 1.0f);
-        physControl.applyImpulse(cam.getDirection().mult(200), cam.getDirection());
+        physControl.applyImpulse(cam.getDirection().mult(400), cam.getDirection());
 
         missile.addControl(physControl);
         bulletAppState.getPhysicsSpace().add(missile);
@@ -178,8 +178,15 @@ public class GameState extends AbstractAppState {
         return missile;
     }
 
+    public void moveAsteroidEffect(Vector3f newLocation, Vector3f oldLocation) {
+    }
+
+    public void createSmoketrail(Vector3f location) {
+    }
+
     public void createExplosion(Vector3f location) {
         ParticleEmitter debrisEffect = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 10);
+
         Material debrisMat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
         debrisMat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Debris.png"));
         debrisEffect.setMaterial(debrisMat);
