@@ -1,9 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
+import control.DebrisControl;
+import control.PhysicsControl;
+import control.MissileControl;
+import control.AsteroidControl;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
@@ -12,6 +12,8 @@ import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.effect.ParticleEmitter;
+import com.jme3.effect.ParticleMesh;
 import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.MouseButtonTrigger;
@@ -22,21 +24,18 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.ui.Picture;
+import java.awt.Color;
 
-/**
- *
- * @author Thomas
- */
 public class GameState extends AbstractAppState {
 
-//    private static final String MAPPING_SHOOT_LASER = "shootlaser";
-//    private static final Trigger TRIGGER_SHOOT_LASER = new MouseButtonTrigger(MouseInput.BUTTON_RIGHT);
     private static final String MAPPING_SHOOT_MISSILE = "shootmissile";
     private static final Trigger TRIGGER_SHOOT_MISSILE = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
     private SimpleApplication app;
@@ -45,8 +44,8 @@ public class GameState extends AbstractAppState {
     private Node rootNode;
     private Node asteroidNode;
     private Node lightNode;
-//    private Node laserNode;
     private Node missileNode;
+    private Node debrisNode;
     private AssetManager assetManager;
     private Ray ray = new Ray();
 
@@ -62,13 +61,13 @@ public class GameState extends AbstractAppState {
         //Create nodes and attatch them
         asteroidNode = new Node("asteroidnode");
         lightNode = new Node("lightnode");
-//        laserNode = new Node("lasernode");
         missileNode = new Node("missilenode");
+        debrisNode = new Node("debrisnode");
         rootNode.addLight(addLight());
         rootNode.attachChild(asteroidNode);
         rootNode.attachChild(lightNode);
         rootNode.attachChild(missileNode);
-//      rootNode.attachChild(laserNode);
+        rootNode.attachChild(debrisNode);
 
         //Add statemanagers & Physics
         bulletAppState = new BulletAppState();
@@ -80,11 +79,6 @@ public class GameState extends AbstractAppState {
         //Create elements
         makeAsteroids(30);
         createGui();
-
-        //Lasers in the works
-//        rootNode.attachChild(laserNode);
-//        app.getInputManager().addMapping(MAPPING_SHOOT_LASER, TRIGGER_SHOOT_LASER);
-//        app.getInputManager().addListener(actionListener, new String[]{MAPPING_SHOOT_LASER});
 
         app.getInputManager().addMapping(MAPPING_SHOOT_MISSILE, TRIGGER_SHOOT_MISSILE);
         app.getInputManager().addListener(actionListener, new String[]{MAPPING_SHOOT_MISSILE});
@@ -110,6 +104,7 @@ public class GameState extends AbstractAppState {
     }
 
     private DirectionalLight addLight() {
+        
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)));
         sun.setColor(ColorRGBA.White.mult(0.5f));
@@ -181,6 +176,26 @@ public class GameState extends AbstractAppState {
         bulletAppState.getPhysicsSpace().add(missile);
         missile.addControl(new MissileControl(this));
         return missile;
+    }
+
+    public void createExplosion(Vector3f location) {
+        ParticleEmitter debrisEffect = new ParticleEmitter("Debris", ParticleMesh.Type.Triangle, 10);
+        Material debrisMat = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
+        debrisMat.setTexture("Texture", assetManager.loadTexture("Textures/Effects/Debris.png"));
+        debrisEffect.setMaterial(debrisMat);
+        debrisEffect.setImagesX(3);
+        debrisEffect.setImagesY(3); // 3x3 texture animation
+        debrisEffect.setRotateSpeed(4);
+        debrisEffect.setSelectRandomImage(true);
+        debrisEffect.getParticleInfluencer().setInitialVelocity(new Vector3f(4, 4, 4));
+        debrisEffect.setStartColor(new ColorRGBA(1f, 1f, 1f, 1f));
+        debrisEffect.setGravity(0f, 0f, 0f);
+        debrisEffect.getParticleInfluencer().setVelocityVariation(1.60f);
+        debrisEffect.setLocalScale(2.0f);
+        debrisEffect.setLocalTranslation(location);
+        debrisEffect.addControl(new DebrisControl());
+        debrisNode.attachChild(debrisEffect);
+        debrisEffect.emitAllParticles();
     }
     //Eventlisteners
     private ActionListener actionListener = new ActionListener() {

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package game;
+package control;
 
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
