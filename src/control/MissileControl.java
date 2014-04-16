@@ -46,6 +46,7 @@ public class MissileControl extends AbstractControl {
     }
 
     public void hitAsteroid(AsteroidControl asteroid) {
+        asteroid.addHealth(-30);
         game.createExplosion(spatial.getWorldTranslation());
         remove();
     }

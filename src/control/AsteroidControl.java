@@ -86,7 +86,16 @@ public class AsteroidControl extends AbstractControl {
         spatial.setUserData("health", health);
     }
     public void addHealth(int damage){
-        setHealth(getHealth() - damage);
+        setHealth(getHealth() + damage);
+        if(getHealth() <= 0){
+            remove();
+        }
+    }
+    
+    public void remove(){
+        spatial.removeFromParent();
+        spatial.removeControl(spatial.getControl(RigidBodyControl.class));
+        spatial.removeControl(this);
     }
     
 }

@@ -19,11 +19,10 @@ public class PhysicsControl extends RigidBodyControl
     }
 
     public void collision(PhysicsCollisionEvent event) {
-        if (event.getNodeB() != null && event.getNodeB() != null) {
+        if (event.getNodeB() != null && event.getNodeA() != null) {
             if (event.getNodeB().getControl(MissileControl.class) != null) {
                 event.getNodeB().getControl(MissileControl.class).hitAsteroid(event.getNodeA().getControl(AsteroidControl.class));
-            }
-            if (event.getNodeA().getControl(MissileControl.class) != null) {
+            } else if (event.getNodeA().getControl(MissileControl.class) != null) {
                 event.getNodeA().getControl(MissileControl.class).hitAsteroid(event.getNodeA().getControl(AsteroidControl.class));
             }
         }
