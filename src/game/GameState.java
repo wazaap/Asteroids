@@ -127,34 +127,9 @@ public class GameState extends AbstractAppState {
     //Create spatials
     private void makeAsteroids(int number) {
         for (int i = 0; i < number; i++) {
-            //Generating random location
-            Vector3f loc = new Vector3f(
-                    FastMath.nextRandomInt(-200, 200),
-                    FastMath.nextRandomInt(-200, 200),
-                    FastMath.nextRandomInt(-200, 200));
-            Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
-            asteroid.setLocalTranslation(loc);
-            asteroid.addControl(new AsteroidControl(this));
             //Setting random size of asteroid
             int size = FastMath.nextRandomInt(0, 10);
-            asteroid.setLocalScale(size);
-            asteroid.setUserData("size", size);
-            asteroid.setUserData("health", size * 10);
-            SphereCollisionShape sphereShape = new SphereCollisionShape(size * 3);
-            RigidBodyControl physControl = new RigidBodyControl(sphereShape, size);
-            //Generating random speed
-            int speed = FastMath.nextRandomInt(25, 75);
-            //Generating random direction of asteroid
-            Vector3f direction = new Vector3f(
-                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
-                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
-                    FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat());
-
-            physControl.applyImpulse(direction.mult(speed), direction);
-            asteroid.addControl(physControl);
-            bulletAppState.getPhysicsSpace().add(asteroid);
-
-            asteroidNode.attachChild(asteroid);
+            makeAsteroid(size);
         }
     }
 
@@ -211,4 +186,31 @@ public class GameState extends AbstractAppState {
             }
         }
     };
+
+    public void makeAsteroid(int size) {
+        //Generating random location
+        Vector3f loc = new Vector3f(
+                FastMath.nextRandomInt(-200, 200),
+                FastMath.nextRandomInt(-200, 200),
+                FastMath.nextRandomInt(-200, 200));
+        Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
+        asteroid.setLocalTranslation(loc);
+        asteroid.addControl(new AsteroidControl(this));
+        asteroid.setLocalScale(size);
+        asteroid.setUserData("size", size);
+        asteroid.setUserData("health", size * 10);
+        SphereCollisionShape sphereShape = new SphereCollisionShape(size * 3);
+        RigidBodyControl physControl = new RigidBodyControl(sphereShape, size);
+        //Generating random speed
+        int speed = FastMath.nextRandomInt(25, 75);
+        //Generating random direction of asteroid
+        Vector3f direction = new Vector3f(
+                FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
+                FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
+                FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat());
+        physControl.applyImpulse(direction.mult(speed), direction);
+        asteroid.addControl(physControl);
+        bulletAppState.getPhysicsSpace().add(asteroid);
+        asteroidNode.attachChild(asteroid);
+    }
 }
