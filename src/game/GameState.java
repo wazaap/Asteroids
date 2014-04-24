@@ -37,7 +37,7 @@ public class GameState extends AbstractAppState {
     private static final Trigger TRIGGER_SHOOT_MISSILE = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
     private SimpleApplication app;
     private Camera cam;
-    BulletAppState bulletAppState;
+    private BulletAppState bulletAppState;
     private Node rootNode;
     private Node asteroidNode;
     private Node lightNode;
@@ -129,7 +129,11 @@ public class GameState extends AbstractAppState {
         for (int i = 0; i < number; i++) {
             //Setting random size of asteroid
             int size = FastMath.nextRandomInt(0, 10);
-            makeAsteroid(size);
+                    Vector3f loc = new Vector3f(
+                FastMath.nextRandomInt(-200, 200),
+                FastMath.nextRandomInt(-200, 200),
+                FastMath.nextRandomInt(-200, 200));
+            makeAsteroid(size, loc);
         }
     }
 
@@ -187,12 +191,9 @@ public class GameState extends AbstractAppState {
         }
     };
 
-    public void makeAsteroid(int size) {
+    public void makeAsteroid(int size, Vector3f loc) {
         //Generating random location
-        Vector3f loc = new Vector3f(
-                FastMath.nextRandomInt(-200, 200),
-                FastMath.nextRandomInt(-200, 200),
-                FastMath.nextRandomInt(-200, 200));
+
         Spatial asteroid = assetManager.loadModel("/Models/Asteroid/Asteroid.j3o");
         asteroid.setLocalTranslation(loc);
         asteroid.addControl(new AsteroidControl(this));

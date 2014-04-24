@@ -5,6 +5,7 @@
 package control;
 
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
@@ -77,25 +78,38 @@ public class AsteroidControl extends AbstractControl {
         }
         game.moveAsteroidEffect(newLocation, oldLocation);
     }
-    
-    public int getHealth(){
+
+    public int getHealth() {
         return spatial.getUserData("health");
     }
-    
-    public void setHealth(int health){
+
+    public void setHealth(int health) {
         spatial.setUserData("health", health);
     }
-    public void addHealth(int damage){
+
+    public int getSize() {
+        return spatial.getUserData("size");
+    }
+
+    public void addHealth(int damage) {
         setHealth(getHealth() + damage);
-        if(getHealth() <= 0){
-            remove();
+        if (getHealth() <= 0) {
+            if (getSize() == 1) {
+                remove();
+            } else {
+                int newAsteroids = FastMath.nextRandomInt(2, 5);
+                int newSize = getSize() / 2;
+                for (int i = 0 ; i < newAsteroids; i++){
+                    game.makeAsteroid(newSize, spatial.getWorldTranslation().mult(FastMath.nextRandomFloat()));
+                }
+
+            }
         }
     }
-    
-    public void remove(){
+
+    public void remove() {
         spatial.removeFromParent();
         spatial.removeControl(spatial.getControl(RigidBodyControl.class));
         spatial.removeControl(this);
     }
-    
 }
