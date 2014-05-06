@@ -24,7 +24,10 @@ public class PhysicsControl extends RigidBodyControl
                 event.getNodeB().getControl(MissileControl.class).hitAsteroid(event.getNodeA().getControl(AsteroidControl.class));
             } else if (event.getNodeA().getControl(MissileControl.class) != null) {
                 event.getNodeA().getControl(MissileControl.class).hitAsteroid(event.getNodeA().getControl(AsteroidControl.class));
+            } else if (event.getNodeA().getControl(PlayerControl.class) != null || event.getNodeB().getControl(PlayerControl.class) != null) {
+                System.out.println("AV FOR HELVEDE!!!");
             }
+
         }
     }
 }
