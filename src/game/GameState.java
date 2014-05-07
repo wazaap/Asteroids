@@ -16,10 +16,8 @@ import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.effect.ParticleEmitter;
 import com.jme3.effect.ParticleMesh;
 import com.jme3.input.KeyInput;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.light.DirectionalLight;
 import com.jme3.material.Material;
@@ -36,18 +34,27 @@ import com.jme3.scene.shape.Sphere;
 import com.jme3.ui.Picture;
 import control.PlayerControl;
 import com.jme3.input.controls.AnalogListener;
-import com.jme3.input.controls.MouseAxisTrigger;
 
 public class GameState extends AbstractAppState {
 
     private static final String MAPPING_SHOOT_MISSILE = "shootmissile";
-    private static final Trigger TRIGGER_SHOOT_MISSILE = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
+    private static final Trigger TRIGGER_SHOOT_MISSILE = new KeyTrigger(KeyInput.KEY_SPACE);
     private static final String MAPPING_THRUST = "thrust";
-    private static final Trigger TRIGGER_THRUST = new KeyTrigger(KeyInput.KEY_W);
+    private static final Trigger TRIGGER_THRUST = new KeyTrigger(KeyInput.KEY_Z);
     private static final String MAPPING_BREAK = "break";
-    private static final Trigger TRIGGER_BREAK = new KeyTrigger(KeyInput.KEY_S);
+    private static final Trigger TRIGGER_BREAK = new KeyTrigger(KeyInput.KEY_X);
     private static final String MAPPING_UP = "up";
-    private static final Trigger TRIGGER_UP = new MouseAxisTrigger(MouseInput.AXIS_X, true);
+    private static final Trigger TRIGGER_UP = new KeyTrigger(KeyInput.KEY_NUMPAD8);
+    private static final String MAPPING_DOWN = "down";
+    private static final Trigger TRIGGER_DOWN = new KeyTrigger(KeyInput.KEY_NUMPAD5);
+    private static final String MAPPING_LEFT = "left";
+    private static final Trigger TRIGGER_LEFT = new KeyTrigger(KeyInput.KEY_NUMPAD4);
+    private static final String MAPPING_RIGHT = "right";
+    private static final Trigger TRIGGER_RIGHT = new KeyTrigger(KeyInput.KEY_NUMPAD6);
+    private static final String MAPPING_ROLL_LEFT = "roll_left";
+    private static final Trigger TRIGGER_ROLL_LEFT = new KeyTrigger(KeyInput.KEY_NUMPAD7);
+    private static final String MAPPING_ROLL_RIGHT = "roll_right";
+    private static final Trigger TRIGGER_ROLL_RIGHT = new KeyTrigger(KeyInput.KEY_NUMPAD9);
     private SimpleApplication app;
     private Camera cam;
     private BulletAppState bulletAppState;
@@ -68,7 +75,6 @@ public class GameState extends AbstractAppState {
         this.cam = this.app.getCamera();
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
-
 
         //Create nodes and attatch them
         playerNode = new Node("playernode");
@@ -105,7 +111,16 @@ public class GameState extends AbstractAppState {
         app.getInputManager().addListener(analogListener, new String[]{MAPPING_BREAK});
         app.getInputManager().addMapping(MAPPING_UP, TRIGGER_UP);
         app.getInputManager().addListener(analogListener, new String[]{MAPPING_UP});
-
+        app.getInputManager().addMapping(MAPPING_DOWN, TRIGGER_DOWN);
+        app.getInputManager().addListener(analogListener, new String[]{MAPPING_DOWN});
+        app.getInputManager().addMapping(MAPPING_LEFT, TRIGGER_LEFT);
+        app.getInputManager().addListener(analogListener, new String[]{MAPPING_LEFT});
+        app.getInputManager().addMapping(MAPPING_RIGHT, TRIGGER_RIGHT);
+        app.getInputManager().addListener(analogListener, new String[]{MAPPING_RIGHT});
+        app.getInputManager().addMapping(MAPPING_ROLL_LEFT, TRIGGER_ROLL_LEFT);
+        app.getInputManager().addListener(analogListener, new String[]{MAPPING_ROLL_LEFT});
+        app.getInputManager().addMapping(MAPPING_ROLL_RIGHT, TRIGGER_ROLL_RIGHT);
+        app.getInputManager().addListener(analogListener, new String[]{MAPPING_ROLL_RIGHT});
 
     }
 
@@ -171,7 +186,7 @@ public class GameState extends AbstractAppState {
         mat.setColor("Color", ColorRGBA.Cyan);
         missile.setMaterial(mat);
         missile.setUserData("direction", cam.getDirection());
-        missile.setLocalTranslation(cam.getDirection().mult(5));
+        missile.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(3)));
 
         SphereCollisionShape sphereShape = new SphereCollisionShape(1.5f);
         RigidBodyControl physControl = new RigidBodyControl(sphereShape, 1.0f);
@@ -213,16 +228,34 @@ public class GameState extends AbstractAppState {
     };
     private AnalogListener analogListener = new AnalogListener() {
         public void onAnalog(String name, float keyPressed, float tpf) {
+            Vector3f xRotation = cam.getRotation().getRotationColumn(0).normalize();
+            Vector3f yRotation = cam.getRotation().getRotationColumn(1).normalize();
+            Vector3f zRotation = cam.getRotation().getRotationColumn(2).normalize();
+            
+            //Forward and backwards
             if (name.equals(MAPPING_THRUST)) {
-                camNode.getControl(RigidBodyControl.class).applyForce(cam.getDirection().mult(300), cam.getDirection());
+                camNode.getControl(RigidBodyControl.class).applyForce(cam.getDirection().mult(500), cam.getDirection());
+            } else if (name.equals(MAPPING_BREAK)) {
+                camNode.getControl(RigidBodyControl.class).applyForce(cam.getDirection().mult(-500), cam.getDirection());
             }
-            if (name.equals(MAPPING_BREAK)) {
-                camNode.getControl(RigidBodyControl.class).applyForce(cam.getDirection().mult(-300), cam.getDirection());
-            }
+            
+            //Up, down, left, right
             if (name.equals(MAPPING_UP)) {
-                System.out.println("UP!");
+                camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(xRotation.mult(tpf)));
+            } else if (name.equals(MAPPING_DOWN)) {
+                camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(xRotation.mult(-tpf)));
+            } else if (name.equals(MAPPING_LEFT)) {
+                camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(yRotation.mult(tpf)));
+            } else if (name.equals(MAPPING_RIGHT)) {
+                camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(yRotation.mult(-tpf)));
             }
-
+            
+            //Roll left and right
+            if (name.equals(MAPPING_ROLL_LEFT)) {
+                camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(zRotation.mult(tpf)));
+            } else if (name.equals(MAPPING_ROLL_RIGHT)) {
+                camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(zRotation.mult(-tpf)));
+            }
         }
     };
 
@@ -252,7 +285,8 @@ public class GameState extends AbstractAppState {
     private void createPlayer() {
         PlayerControl pc = new PlayerControl(this);
         BoxCollisionShape cBox = new BoxCollisionShape(new Vector3f(2, 2, 2));
-        RigidBodyControl physControl = new RigidBodyControl(cBox, 10);
+        RigidBodyControl physControl = new RigidBodyControl(cBox, 5);
+        physControl.setDamping(0.5f, 0.5f);
         camNode.addControl(physControl);
         camNode.addControl(pc);
         camNode.setControlDir(ControlDirection.SpatialToCamera);

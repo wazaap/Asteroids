@@ -28,6 +28,5 @@ public class PlayerControl extends AbstractControl{
 
     @Override
     protected void controlRender(RenderManager rm, ViewPort vp) {
-    }
-    
+    }    
 }
