@@ -46,7 +46,7 @@ public class GameState extends AbstractAppState {
     private static final String MAPPING_UP = "up";
     private static final Trigger TRIGGER_UP = new KeyTrigger(KeyInput.KEY_NUMPAD8);
     private static final String MAPPING_DOWN = "down";
-    private static final Trigger TRIGGER_DOWN = new KeyTrigger(KeyInput.KEY_NUMPAD5);
+    private static final Trigger TRIGGER_DOWN = new KeyTrigger(KeyInput.KEY_NUMPAD2);
     private static final String MAPPING_LEFT = "left";
     private static final Trigger TRIGGER_LEFT = new KeyTrigger(KeyInput.KEY_NUMPAD4);
     private static final String MAPPING_RIGHT = "right";
