@@ -69,12 +69,12 @@ public class GameState extends AbstractAppState {
         rootNode.attachChild(debrisNode);
         rootNode.attachChild(playerNode);
         rootNode.attachChild(factory.addBackground());
-        playerNode.attachChild(factory.createPlayer(camNode));
 
         //Add statemanagers & Physics
         stateManager.attach(bulletAppState);
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, 0, 0));
         bulletAppState.getPhysicsSpace().addCollisionListener(new PhysicsControl());
+        playerNode.attachChild(factory.createPlayer(camNode));
         stateManager.attach(this);
 
         //Create elements
