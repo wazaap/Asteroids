@@ -9,6 +9,7 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
 import com.jme3.bullet.collision.shapes.SphereCollisionShape;
@@ -66,6 +67,7 @@ public class GameState extends AbstractAppState {
     private Node playerNode;
     private CameraNode camNode;
     private AssetManager assetManager;
+    private AudioNode missileAudio;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -83,7 +85,9 @@ public class GameState extends AbstractAppState {
         missileNode = new Node("missilenode");
         debrisNode = new Node("debrisnode");
         camNode = new CameraNode("camNode", cam);
-
+        missileAudio = new AudioNode( assetManager,"Sounds/Effects/blast_heavy.wav");
+        
+        
         rootNode.addLight(addLight());
         rootNode.attachChild(asteroidNode);
         rootNode.attachChild(lightNode);
@@ -195,6 +199,7 @@ public class GameState extends AbstractAppState {
         missile.addControl(physControl);
         bulletAppState.getPhysicsSpace().add(missile);
         missile.addControl(new MissileControl(this));
+        missileAudio.playInstance();
         return missile;
     }
 
