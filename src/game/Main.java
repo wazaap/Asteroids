@@ -20,8 +20,6 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         flyCam.setEnabled(false);
-        rootNode.attachChild(SkyFactory.createSky(
-                assetManager, "Textures/SkyBox/BackgroundCube.dds", false));
         Factory factory = new Factory(assetManager);
         ControlFactory controlFactory = new ControlFactory();
         GameState state = new GameState(rootNode, factory, controlFactory);

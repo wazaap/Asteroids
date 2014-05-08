@@ -23,6 +23,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.shape.Sphere;
 import com.jme3.ui.Picture;
+import com.jme3.util.SkyFactory;
 import control.AsteroidControl;
 import control.DebrisControl;
 import control.MissileControl;
@@ -38,11 +39,13 @@ public final class Factory {
     private BulletAppState bulletAppState;
     private AudioNode missileAudio;
     private AudioNode ambientAudio;
-
+    private Material missileMaterial;
+    
     public Factory(AssetManager am) {
         this.am = am;
         missileAudio = new AudioNode(am, "Sounds/Effects/blast_heavy.wav");
         ambientAudio = new AudioNode(am, "Sounds/Ambient/space_ambient.ogg", true);
+        missileMaterial = new Material(am, "Common/MatDefs/Misc/Unshaded.j3md");
     }
 
     public DirectionalLight addSunLight() {
@@ -50,6 +53,11 @@ public final class Factory {
         sun.setDirection((new Vector3f(-0.5f, -0.5f, -0.5f)));
         sun.setColor(ColorRGBA.White.mult(0.5f));
         return sun;
+    }
+    
+    public Spatial addBackground(){
+        return SkyFactory.createSky(
+                am, "Textures/SkyBox/BackgroundCube.dds", false);
     }
 
     public void ambientSounds(boolean start) {
@@ -66,11 +74,11 @@ public final class Factory {
     }
 
     public Picture getCrosshair() {
-        Picture pic = new Picture("HUD Picture");
-        pic.setImage(am, "Interface/crosshair1.png", true);
-        pic.setWidth(180);
-        pic.setHeight(180);
-        return pic;
+        Picture crosshair = new Picture("HUD Picture");
+        crosshair.setImage(am, "Interface/crosshair1.png", true);
+        crosshair.setWidth(180);
+        crosshair.setHeight(180);
+        return crosshair;
     }
 
     public Spatial createAsteroid(int size, Vector3f loc) {
@@ -118,9 +126,8 @@ public final class Factory {
     public Spatial createMissile(Vector3f location, Vector3f direction) {
         Sphere s = new Sphere(16, 16, 2f);
         Spatial missile = new Geometry("missile", s);
-        Material mat = new Material(am, "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Cyan);
-        missile.setMaterial(mat);
+        missileMaterial.setColor("Color", ColorRGBA.Cyan);
+        missile.setMaterial(missileMaterial);
         missile.setUserData("direction", direction);
         missile.setLocalTranslation(location.add(direction.mult(3)));
         SphereCollisionShape sphereShape = new SphereCollisionShape(1.5f);

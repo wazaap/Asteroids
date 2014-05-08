@@ -18,7 +18,7 @@ public class UIState extends AbstractAppState {
 
     private Node guiNode;
     private Factory factory;
-    Application app;
+    private Application app;
 
     public UIState(Node guiNode, Factory factory) {
         this.guiNode = guiNode;
@@ -29,7 +29,7 @@ public class UIState extends AbstractAppState {
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = app;
-        createGui();
+        createCrosshair();
 
     }
 
@@ -38,12 +38,12 @@ public class UIState extends AbstractAppState {
         super.update(tpf); //To change body of generated methods, choose Tools | Templates.
     }
 
-    private void createGui() {
+    private void createCrosshair() {
         float y = app.getContext().getSettings().getHeight();
         float x = app.getContext().getSettings().getWidth();
-        Picture pic = factory.getCrosshair();
-        pic.setPosition(x / 2 - 90, y / 2 - 90);
-        guiNode.attachChild(pic);
+        Picture crosshair = factory.getCrosshair();
+        crosshair.setPosition(x / 2 - 90, y / 2 - 90);
+        guiNode.attachChild(crosshair);
     }
 
     @Override

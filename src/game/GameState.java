@@ -40,6 +40,8 @@ public class GameState extends AbstractAppState {
         lightNode = new Node("lightnode");
         missileNode = new Node("missilenode");
         debrisNode = new Node("debrisnode");
+
+        
     }
 
     @Override
@@ -48,7 +50,7 @@ public class GameState extends AbstractAppState {
         super.initialize(stateManager, app);
         this.app = (SimpleApplication) app;
         camNode = new CameraNode("camNode", this.app.getCamera());
-        
+
         //Setup ControlFactory
         controlFactory.setCamNode(camNode);
         controlFactory.setGameState(this);
@@ -58,7 +60,7 @@ public class GameState extends AbstractAppState {
         //Setup factory
         factory.setBulletAppState(bulletAppState);
         factory.ambientSounds(true);
-        
+
         //Setup Nodes
         rootNode.addLight(factory.addSunLight());
         rootNode.attachChild(asteroidNode);
@@ -66,6 +68,8 @@ public class GameState extends AbstractAppState {
         rootNode.attachChild(missileNode);
         rootNode.attachChild(debrisNode);
         rootNode.attachChild(playerNode);
+        rootNode.attachChild(factory.addBackground());
+        playerNode.attachChild(factory.createPlayer(camNode));
 
         //Add statemanagers & Physics
         stateManager.attach(bulletAppState);
@@ -75,7 +79,6 @@ public class GameState extends AbstractAppState {
 
         //Create elements
         makeAsteroids(30);
-        playerNode.attachChild(factory.createPlayer(camNode));
     }
 
     @Override
