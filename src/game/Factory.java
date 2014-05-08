@@ -141,7 +141,7 @@ public final class Factory {
     }
 
     public CameraNode createPlayer(CameraNode camNode) {
-        PlayerControl pc = new PlayerControl(this);
+        PlayerControl pc = new PlayerControl(state);
         BoxCollisionShape cBox = new BoxCollisionShape(new Vector3f(2, 2, 2));
         RigidBodyControl physControl = new RigidBodyControl(cBox, 5);
         physControl.setDamping(0.5f, 0.5f);

@@ -8,7 +8,6 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
-import game.Factory;
 import game.GameState;
 
 public class AsteroidControl extends AbstractControl {

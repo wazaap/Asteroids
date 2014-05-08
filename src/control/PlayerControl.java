@@ -3,14 +3,14 @@ package control;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
-import game.Factory;
+import game.GameState;
 
 public class PlayerControl extends AbstractControl{
 
-    private Factory factory;
+    private GameState state;
 
-    public PlayerControl(Factory factory) {
-        this.factory = factory;
+    public PlayerControl(GameState state) {
+        this.state = state;
     }
     
     @Override
