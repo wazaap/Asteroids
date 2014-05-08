@@ -85,9 +85,14 @@ public class GameState extends AbstractAppState {
         missileNode = new Node("missilenode");
         debrisNode = new Node("debrisnode");
         camNode = new CameraNode("camNode", cam);
-        missileAudio = new AudioNode( assetManager,"Sounds/Effects/blast_heavy.wav");
-        
-        
+        missileAudio = new AudioNode(assetManager, "Sounds/Effects/blast_heavy.wav");
+
+        //Add Ambient sound
+        AudioNode natureAudio = new AudioNode(assetManager,
+                "Sounds/Ambient/space_ambient.ogg", true); // streaming=true
+        natureAudio.setVolume(8);
+        natureAudio.play();
+
         rootNode.addLight(addLight());
         rootNode.attachChild(asteroidNode);
         rootNode.attachChild(lightNode);
@@ -236,14 +241,14 @@ public class GameState extends AbstractAppState {
             Vector3f xRotation = cam.getRotation().getRotationColumn(0).normalize();
             Vector3f yRotation = cam.getRotation().getRotationColumn(1).normalize();
             Vector3f zRotation = cam.getRotation().getRotationColumn(2).normalize();
-            
+
             //Forward and backwards
             if (name.equals(MAPPING_THRUST)) {
                 camNode.getControl(RigidBodyControl.class).applyForce(cam.getDirection().mult(500), cam.getDirection());
             } else if (name.equals(MAPPING_BREAK)) {
                 camNode.getControl(RigidBodyControl.class).applyForce(cam.getDirection().mult(-500), cam.getDirection());
             }
-            
+
             //Up, down, left, right
             if (name.equals(MAPPING_UP)) {
                 camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(xRotation.mult(tpf)));
@@ -254,7 +259,7 @@ public class GameState extends AbstractAppState {
             } else if (name.equals(MAPPING_RIGHT)) {
                 camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(yRotation.mult(-tpf)));
             }
-            
+
             //Roll left and right
             if (name.equals(MAPPING_ROLL_LEFT)) {
                 camNode.getControl(RigidBodyControl.class).setAngularVelocity(camNode.getControl(RigidBodyControl.class).getAngularVelocity().add(zRotation.mult(tpf)));
