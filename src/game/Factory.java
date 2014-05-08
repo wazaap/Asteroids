@@ -32,6 +32,7 @@ public final class Factory {
     private AudioNode missileAudio;
     private AudioNode ambientAudio;
     private Material missileMaterial;
+    private GameState state;
     
     public Factory(AssetManager am) {
         this.am = am;
@@ -39,6 +40,12 @@ public final class Factory {
         ambientAudio = new AudioNode(am, "Sounds/Ambient/space_ambient.ogg", true);
         missileMaterial = new Material(am, "Common/MatDefs/Misc/Unshaded.j3md");
     }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+    
+    
 
     public DirectionalLight addSunLight() {
         DirectionalLight sun = new DirectionalLight();
@@ -76,12 +83,13 @@ public final class Factory {
     public Spatial createAsteroid(int size, Vector3f loc) {
         Spatial asteroid = am.loadModel("/Models/Asteroid/Asteroid.j3o");
         asteroid.setLocalTranslation(loc);
-        asteroid.addControl(new AsteroidControl(this));
+        asteroid.addControl(new AsteroidControl(state));
         asteroid.setLocalScale(size);
         asteroid.setUserData("size", size);
         asteroid.setUserData("health", size * 10);
         SphereCollisionShape sphereShape = new SphereCollisionShape(size * 3);
         RigidBodyControl physControl = new RigidBodyControl(sphereShape, size);
+        physControl.setDamping(0.3f, 0.3f);
         //Generating random speed
         int speed = FastMath.nextRandomInt(125, 175);
         //Generating random direction of asteroid
@@ -126,11 +134,10 @@ public final class Factory {
         RigidBodyControl physControl = new RigidBodyControl(sphereShape, 1.0f);
         physControl.applyImpulse(direction.mult(400), direction);
         missile.addControl(physControl);
-        missile.addControl(new MissileControl(this));
+        missile.addControl(new MissileControl(state));
         missileAudio.playInstance();
         bulletAppState.getPhysicsSpace().add(missile);
         return missile;
-
     }
 
     public CameraNode createPlayer(CameraNode camNode) {

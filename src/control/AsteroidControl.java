@@ -9,14 +9,15 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import game.Factory;
+import game.GameState;
 
 public class AsteroidControl extends AbstractControl {
 
-    private Factory factory;
     private int worldSize;
+    private GameState state;
 
-    public AsteroidControl(Factory factory) {
-        this.factory = factory;
+    public AsteroidControl(GameState state) {
+        this.state = state;
         this.worldSize = 400;
     }
 
@@ -84,15 +85,16 @@ public class AsteroidControl extends AbstractControl {
 
     public void addHealth(int damage) {
         setHealth(getHealth() + damage);
+                int newSize = getSize() / 2;
         if (getHealth() <= 0) {
-            if (getSize() == 1) {
+            if (newSize <= 1) {
                 remove();
             } else {
                 int newAsteroids = FastMath.nextRandomInt(2, 5);
-                int newSize = getSize() / 2;
                 for (int i = 0; i < newAsteroids; i++) {
-                    factory.createAsteroid(newSize, spatial.getWorldTranslation().mult(FastMath.nextRandomFloat()));
+                    state.makeAsteroid(newSize, spatial.getWorldTranslation());
                 }
+                remove();
             }
         }
     }

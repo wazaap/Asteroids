@@ -5,15 +5,15 @@ import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
-import game.Factory;
+import game.GameState;
 
 public class MissileControl extends AbstractControl {
 
-    private Factory factory;
     private float time;
+    private GameState state;
 
-    public MissileControl(Factory factory) {
-        this.factory = factory;
+    public MissileControl(GameState state) {
+        this.state = state;
         time = 0;
     }
 
@@ -40,7 +40,7 @@ public class MissileControl extends AbstractControl {
     public void hitAsteroid(AsteroidControl asteroid) {
         if (asteroid != null) {
             asteroid.addHealth(-30);
-            factory.createExplosion(spatial.getWorldTranslation());
+            state.createExplosion(spatial.getWorldTranslation());
             remove();
         }
     }

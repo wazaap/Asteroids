@@ -59,6 +59,7 @@ public class GameState extends AbstractAppState {
 
         //Setup factory
         factory.setBulletAppState(bulletAppState);
+        factory.setState(this);
         factory.ambientSounds(true);
 
         //Setup Nodes
