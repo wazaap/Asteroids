@@ -12,6 +12,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
+import game.Factory;
 import game.GameState;
 
 /**
@@ -20,11 +21,11 @@ import game.GameState;
  */
 public class AsteroidControl extends AbstractControl {
 
-    private GameState game;
+    private Factory factory;
     private int worldSize;
 
-    public AsteroidControl(GameState game) {
-        this.game = game;
+    public AsteroidControl(Factory factory) {
+        this.factory = factory;
         this.worldSize = 400;
     }
 
@@ -76,7 +77,6 @@ public class AsteroidControl extends AbstractControl {
             newLocation.setZ(worldSize);
             spatial.getControl(RigidBodyControl.class).setPhysicsLocation(newLocation);
         }
-        game.moveAsteroidEffect(newLocation, oldLocation);
     }
 
     public int getHealth() {
@@ -100,9 +100,8 @@ public class AsteroidControl extends AbstractControl {
                 int newAsteroids = FastMath.nextRandomInt(2, 5);
                 int newSize = getSize() / 2;
                 for (int i = 0 ; i < newAsteroids; i++){
-                    game.makeAsteroid(newSize, spatial.getWorldTranslation().mult(FastMath.nextRandomFloat()));
+                    factory.createAsteroid(newSize, spatial.getWorldTranslation().mult(FastMath.nextRandomFloat()));
                 }
-
             }
         }
     }

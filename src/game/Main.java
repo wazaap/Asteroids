@@ -1,27 +1,20 @@
 package game;
 
 import com.jme3.app.SimpleApplication;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
-import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
-import com.jme3.scene.Geometry;
-import com.jme3.scene.shape.Box;
 import com.jme3.system.AppSettings;
 import com.jme3.util.SkyFactory;
 
-/**
- * test
- * @author normenhansen
- */
 public class Main extends SimpleApplication {
 
+
+    
     public static void main(String[] args) {
         AppSettings settings = new AppSettings(true);
         settings.setTitle("Asteroids 3D");
         Main app = new Main();
-        app.setSettings(settings); // apply settings to app
-        app.start(); // use settings and run
+        app.setSettings(settings);
+        app.start();
     }
 
     @Override
@@ -29,7 +22,10 @@ public class Main extends SimpleApplication {
         flyCam.setEnabled(false);
         rootNode.attachChild(SkyFactory.createSky(
                 assetManager, "Textures/SkyBox/BackgroundCube.dds", false));
-        GameState state = new GameState();
+        Factory factory = new Factory(assetManager);
+        ControlFactory controlFactory = new ControlFactory();
+        GameState state = new GameState(rootNode, factory, controlFactory);
+        stateManager.attach(new UIState(guiNode, factory));
         stateManager.attach(state);
     }
 
@@ -39,6 +35,5 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleRender(RenderManager rm) {
-        //TODO: add render code
     }
 }
