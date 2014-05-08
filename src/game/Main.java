@@ -3,7 +3,6 @@ package game;
 import com.jme3.app.SimpleApplication;
 import com.jme3.renderer.RenderManager;
 import com.jme3.system.AppSettings;
-import com.jme3.util.SkyFactory;
 
 public class Main extends SimpleApplication {
 

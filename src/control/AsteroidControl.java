@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package control;
 
 import com.jme3.bullet.control.RigidBodyControl;
@@ -13,12 +9,7 @@ import com.jme3.scene.Spatial;
 import com.jme3.scene.control.AbstractControl;
 import com.jme3.scene.control.Control;
 import game.Factory;
-import game.GameState;
 
-/**
- *
- * @author Thomas
- */
 public class AsteroidControl extends AbstractControl {
 
     private Factory factory;
@@ -99,7 +90,7 @@ public class AsteroidControl extends AbstractControl {
             } else {
                 int newAsteroids = FastMath.nextRandomInt(2, 5);
                 int newSize = getSize() / 2;
-                for (int i = 0 ; i < newAsteroids; i++){
+                for (int i = 0; i < newAsteroids; i++) {
                     factory.createAsteroid(newSize, spatial.getWorldTranslation().mult(FastMath.nextRandomFloat()));
                 }
             }

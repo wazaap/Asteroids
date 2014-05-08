@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import com.jme3.bullet.control.RigidBodyControl;
@@ -14,10 +10,6 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.CameraNode;
 
-/**
- *
- * @author Thomas
- */
 public class ControlFactory {
 
     private CameraNode camNode;

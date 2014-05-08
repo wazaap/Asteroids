@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package control;
 
 import com.jme3.bullet.control.RigidBodyControl;
@@ -11,10 +7,6 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.scene.control.AbstractControl;
 import game.Factory;
 
-/**
- *
- * @author Thomas
- */
 public class MissileControl extends AbstractControl {
 
     private Factory factory;

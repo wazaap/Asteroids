@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import com.jme3.asset.AssetManager;
@@ -29,10 +25,6 @@ import control.DebrisControl;
 import control.MissileControl;
 import control.PlayerControl;
 
-/**
- *
- * @author Thomas
- */
 public final class Factory {
 
     private AssetManager am;

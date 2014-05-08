@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package game;
 
 import com.jme3.app.Application;
@@ -10,10 +6,6 @@ import com.jme3.app.state.AppStateManager;
 import com.jme3.scene.Node;
 import com.jme3.ui.Picture;
 
-/**
- *
- * @author Thomas
- */
 public class UIState extends AbstractAppState {
 
     private Node guiNode;
