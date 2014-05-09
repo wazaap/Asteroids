@@ -27,6 +27,7 @@ public class GameState extends AbstractAppState {
     private CameraNode camNode;
     private Factory factory;
     private ControlFactory controlFactory;
+    private int asteroidsHit = 0;
 
     public GameState(Node rootNode, Factory assetManager, ControlFactory controlFactory) {
         this.rootNode = rootNode;
@@ -41,7 +42,8 @@ public class GameState extends AbstractAppState {
         missileNode = new Node("missilenode");
         debrisNode = new Node("debrisnode");
 
-        
+
+
     }
 
     @Override
@@ -88,6 +90,14 @@ public class GameState extends AbstractAppState {
 
     @Override
     public void cleanup() {
+    }
+
+    public void destroyAsteroid() {
+        asteroidsHit++;
+    }
+
+    public int getAsteroidsDestroyed() {
+        return asteroidsHit;
     }
 
     //Getters and setters

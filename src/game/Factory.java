@@ -145,8 +145,8 @@ public final class Factory {
         BoxCollisionShape cBox = new BoxCollisionShape(new Vector3f(2, 2, 2));
         RigidBodyControl physControl = new RigidBodyControl(cBox, 5);
         physControl.setDamping(0.5f, 0.5f);
-        camNode.addControl(physControl);
         camNode.addControl(pc);
+        camNode.addControl(physControl);
         camNode.setControlDir(CameraControl.ControlDirection.SpatialToCamera);
         bulletAppState.getPhysicsSpace().add(camNode);
         return camNode;

@@ -47,6 +47,7 @@ public class ControlFactory {
         this.inputManager = inputManager;
     }
     public void activateControls() {
+        inputManager.setCursorVisible(false);
         inputManager.addMapping(MAPPING_SHOOT_MISSILE, TRIGGER_SHOOT_MISSILE);
         inputManager.addListener(actionListener, new String[]{MAPPING_SHOOT_MISSILE});
         inputManager.addMapping(MAPPING_THRUST, TRIGGER_THRUST);

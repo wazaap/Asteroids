@@ -84,8 +84,9 @@ public class AsteroidControl extends AbstractControl {
 
     public void addHealth(int damage) {
         setHealth(getHealth() + damage);
-                int newSize = getSize() / 2;
+        int newSize = getSize() / 2;
         if (getHealth() <= 0) {
+            state.destroyAsteroid();
             if (newSize <= 1) {
                 remove();
             } else {

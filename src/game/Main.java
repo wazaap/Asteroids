@@ -22,8 +22,8 @@ public class Main extends SimpleApplication {
         Factory factory = new Factory(assetManager);
         ControlFactory controlFactory = new ControlFactory();
         GameState state = new GameState(rootNode, factory, controlFactory);
-        stateManager.attach(new UIState(guiNode, factory));
         stateManager.attach(state);
+        stateManager.attach(new UIState(guiNode, factory));
     }
 
     @Override
