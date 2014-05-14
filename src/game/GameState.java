@@ -27,7 +27,11 @@ public class GameState extends AbstractAppState {
     private CameraNode camNode;
     private Factory factory;
     private ControlFactory controlFactory;
+    //Playerstats
+    private int playerHealth;
     private int asteroidsHit = 0;
+    private boolean playerHit = false;
+    private float playerHitTime = 0;
 
     public GameState(Node rootNode, Factory assetManager, ControlFactory controlFactory) {
         this.rootNode = rootNode;
@@ -41,9 +45,8 @@ public class GameState extends AbstractAppState {
         lightNode = new Node("lightnode");
         missileNode = new Node("missilenode");
         debrisNode = new Node("debrisnode");
-
-
-
+        //Player stats
+        playerHealth = 100;
     }
 
     @Override
@@ -51,6 +54,7 @@ public class GameState extends AbstractAppState {
         //Initialize stuff
         super.initialize(stateManager, app);
         this.app = (SimpleApplication) app;
+
         camNode = new CameraNode("camNode", this.app.getCamera());
 
         //Setup ControlFactory
@@ -86,6 +90,13 @@ public class GameState extends AbstractAppState {
 
     @Override
     public void update(float tpf) {
+        if (playerHit) {
+            playerHitTime += tpf;
+            if (playerHitTime > 1) {
+                playerHitTime = 0;
+                playerHit = false;
+            }
+        }
     }
 
     @Override
@@ -147,5 +158,23 @@ public class GameState extends AbstractAppState {
 
     public void fireMissile() {
         missileNode.attachChild(factory.createMissile(camNode.getCamera().getLocation(), camNode.getCamera().getDirection()));
+    }
+
+    public void hitPlayer(int amount) {
+        if (!playerHit) {
+            playerHealth += amount;
+            playerHit = true;
+            if (playerHealth < 0) {
+                app.stop();
+            }
+        }
+    }
+
+    public int getPlayerHealth() {
+        return playerHealth;
+    }
+
+    public boolean isPlayerHit() {
+        return playerHit;
     }
 }

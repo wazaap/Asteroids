@@ -22,6 +22,8 @@ public class UIState extends AbstractAppState {
     private BitmapFont guiFont;
     private BitmapText speedText;
     private BitmapText hitText;
+    private BitmapText playerHealthText;
+    private BitmapText playerHitText;
 
     public UIState(Node guiNode, Factory factory) {
         this.guiNode = guiNode;
@@ -37,6 +39,8 @@ public class UIState extends AbstractAppState {
         camNode = app.getStateManager().getState(GameState.class).getCameraNode();
         speedText = new BitmapText(guiFont, false);
         hitText = new BitmapText(guiFont, false);
+        playerHealthText = new BitmapText(guiFont, false);
+        playerHitText = new BitmapText(guiFont, false);
 
         createCrosshair();
         createText();
@@ -48,7 +52,13 @@ public class UIState extends AbstractAppState {
         Vector3f vspeed = camNode.getControl(RigidBodyControl.class).getLinearVelocity();
         speed = (int) Math.round(vspeed.length());
         speedText.setText("Speed: " + speed);
-        hitText.setText("You have destroyed " + app.getStateManager().getState(GameState.class).getAsteroidsDestroyed() + " asteroids");
+        hitText.setText("Asteroids destroyed: " + app.getStateManager().getState(GameState.class).getAsteroidsDestroyed());
+        playerHealthText.setText("Your health is: " + app.getStateManager().getState(GameState.class).getPlayerHealth());
+        if (app.getStateManager().getState(GameState.class).isPlayerHit()) {
+            playerHitText.setText("You've been HIT!!");
+        } else {
+            playerHitText.setText("");
+        }
     }
 
     private void createCrosshair() {
@@ -73,7 +83,15 @@ public class UIState extends AbstractAppState {
         guiNode.attachChild(speedText);
         hitText.setSize(30);
         hitText.setColor(ColorRGBA.Green);
-        hitText.setLocalTranslation(screenWidth-420, screenHeight, 0);
+        hitText.setLocalTranslation(screenWidth - 335, screenHeight, 0);
         guiNode.attachChild(hitText);
+        playerHealthText.setSize(30);
+        playerHealthText.setColor(ColorRGBA.Green);
+        playerHealthText.setLocalTranslation(screenWidth - 252, screenHeight - 30, 0);
+        guiNode.attachChild(playerHealthText);
+        playerHitText.setSize(30);
+        playerHitText.setColor(ColorRGBA.Red);
+        playerHitText.setLocalTranslation(screenWidth / 2 - 100, screenHeight / 2 - 100, 100);
+        guiNode.attachChild(playerHitText);
     }
 }

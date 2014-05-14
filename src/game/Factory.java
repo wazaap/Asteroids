@@ -97,7 +97,7 @@ public final class Factory {
                 FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
                 FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat(),
                 FastMath.nextRandomFloat() / 2 - FastMath.nextRandomFloat());
-        physControl.applyImpulse(direction.mult(speed), direction);
+        physControl.applyImpulse(direction.mult(speed), Vector3f.ZERO);
         asteroid.addControl(physControl);
         bulletAppState.getPhysicsSpace().add(asteroid);
         return asteroid;

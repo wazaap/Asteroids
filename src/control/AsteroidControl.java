@@ -104,4 +104,8 @@ public class AsteroidControl extends AbstractControl {
         spatial.removeControl(spatial.getControl(RigidBodyControl.class));
         spatial.removeControl(this);
     }
+    
+    public void hitPlayer(){
+        state.hitPlayer(-getSize());
+    }
 }
