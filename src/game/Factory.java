@@ -89,7 +89,7 @@ public final class Factory {
         asteroid.setUserData("health", size * 10);
         SphereCollisionShape sphereShape = new SphereCollisionShape(size * 3);
         RigidBodyControl physControl = new RigidBodyControl(sphereShape, size);
-        physControl.setDamping(0.3f, 0.3f);
+        physControl.setDamping(0.05f, 0.05f);
         //Generating random speed
         int speed = FastMath.nextRandomInt(125, 175);
         //Generating random direction of asteroid
